@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Reviews – The Study Zoid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #1e293b;
+      --accent: #38bdf8;
+      --light: #e0f2fe;
+      --white: #ffffff;
+      --muted: #94a3b8;
+      --border: rgba(56,189,248,0.15);
+      --glow: 0 0 40px rgba(56,189,248,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--primary);
+      color: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(15,23,42,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover { color: var(--accent); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    /* ─── PAGE HEADER ─────────────────────────────── */
+    .page-header {
+      padding: 130px 5% 70px;
+      background: var(--secondary);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 65%);
+    }
+
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 500px;
+    }
+
+    /* ─── CONTENT ─────────────────────────────────── */
+    .content {
+      padding: 72px 5%;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ─── FORM ────────────────────────────────────── */
+    .form-card {
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .form-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .form-card > p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    select option { background: var(--secondary); }
+
+    textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    /* Star rating visual (decorative) */
+    .star-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .star-preview {
+      font-size: 1.4rem;
+      margin-top: 4px;
+      letter-spacing: 2px;
+      color: #fbbf24;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: var(--primary);
+      border: none;
+      border-radius: 8px;
+      padding: 15px 28px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(56,189,248,0.3);
+    }
+
+    .form-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* ─── SUCCESS / REQUIRED NOTICE ──────────────── */
+    .success-box {
+      display: none;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.3);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--primary);
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 80px;
+    }
+
+    footer .footer-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--white);
+    }
+
+    footer p { color: var(--muted); font-size: 0.85rem; }
+
+    footer nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-left: 20px;
+      transition: color 0.2s;
+    }
+
+    footer nav a:hover { color: var(--accent); }
+
+    /* ─── MOBILE ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px; left: 0; right: 0;
+        background: var(--secondary);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 20px 5%;
+        gap: 0;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 1rem; }
+
+      .form-card { padding: 32px 24px; }
+      footer { flex-direction: column; text-align: center; }
+      footer nav { margin-top: 8px; }
+      footer nav a { margin: 0 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="The Study Zoid Logo" />
+    <span>The Study Zoid</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#courses">Courses</a></li>
+    <li><a href="study.html">Study Material</a></li>
+    <li><a href="review.html" class="active">Reviews</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── PAGE HEADER ───────────────────────────────── -->
+<div class="page-header">
+  <p class="section-tag">Student Feedback</p>
+  <h1>Share Your Review</h1>
+  <p>Your feedback helps us improve and helps future students choose the right coaching.</p>
+</div>
+
+<!-- ─── CONTENT ───────────────────────────────────── -->
+<div class="content">
+  <div class="form-card">
+    <h2>⭐ Leave a Review</h2>
+    <p>Studied at The Study Zoid? Tell us about your experience.</p>
+
+    <!--
+    ══════════════════════════════════════════════════
+    ✏️ FORMSPREE SETUP INSTRUCTIONS:
+    1. Go to https://formspree.io and create a free account.
+    2. Click "New Form", give it a name (e.g. "Study Zoid Reviews").
+    3. Copy your form ID from the Formspree dashboard.
+       It looks like: xpwzabcd (8 characters)
+    4. Replace YOUR_FORMSPREE_ID below with your actual ID.
+       Example: action="https://formspree.io/f/xpwzabcd"
+    5. Formspree will email you every new submission.
+    ══════════════════════════════════════════════════
+    -->
+
+    <form
+      action="https://formspree.io/f/YOUR_FORMSPREE_ID"
+      method="POST"
+      id="reviewForm"
+    >
+      <!-- ─── Name ─── -->
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="e.g. Rahul Sharma"
+          required
+        />
+      </div>
+
+      <!-- ─── Rating ─── -->
+      <div class="form-group">
+        <label for="rating">Rating</label>
+        <select id="rating" name="rating" required>
+          <option value="" disabled selected>Select your rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ — Excellent (5/5)</option>
+          <option value="4">⭐⭐⭐⭐ — Very Good (4/5)</option>
+          <option value="3">⭐⭐⭐ — Good (3/5)</option>
+          <option value="2">⭐⭐ — Fair (2/5)</option>
+          <option value="1">⭐ — Poor (1/5)</option>
+        </select>
+      </div>
+
+      <!-- ─── Course (optional) ─── -->
+      <div class="form-group">
+        <label for="course">Course / Class <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+        <select id="course" name="course">
+          <option value="" selected>Select your course</option>
+          <option value="Class 2–5">Class 2–5</option>
+          <option value="Class 6–8">Class 6–8</option>
+          <option value="Class 9–10">Class 9–10</option>
+          <option value="Class 11–12">Class 11–12</option>
+          <option value="JEE">JEE Preparation</option>
+          <option value="NEET">NEET Preparation</option>
+          <option value="Punjabi Typing">Punjabi Typing Course</option>
+        </select>
+      </div>
+
+      <!-- ─── Message ─── -->
+      <div class="form-group">
+        <label for="message">Your Review</label>
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Share your experience — what you liked, what helped you, how the faculty was..."
+          required
+        ></textarea>
+      </div>
+
+      <!-- Hidden field to identify the form source -->
+      <input type="hidden" name="_subject" value="New Review – The Study Zoid" />
+
+      <!-- Formspree honeypot (spam protection) -->
+      <input type="text" name="_gotcha" style="display:none" />
+
+      <button type="submit" class="btn-submit">Submit My Review →</button>
+      <p class="form-note">Your review is sent directly to us via Formspree. No account needed.</p>
+    </form>
+
+    <!-- Success message shown after JS redirect (Formspree AJAX) -->
+    <div class="success-box" id="successMsg">
+      ✅ Thank you! Your review has been submitted successfully.
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div>
+    <div class="footer-brand">The Study Zoid</div>
+    <p style="margin-top:6px;">Beyond The Classroom</p>
+  </div>
+  <p>© 2025 The Study Zoid. All rights reserved.</p>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="study.html">Study Material</a>
+    <a href="review.html">Reviews</a>
+  </nav>
+</footer>
+
+<script>
+  // Mobile nav
+  document.getElementById('hamburger').addEventListener('click', function () {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // Optional: Formspree AJAX submission for better UX (no page redirect)
+  // This works with Formspree's free plan.
+  const form = document.getElementById('reviewForm');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.reset();
+        form.style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+      } else {
+        // Fallback: submit normally if AJAX fails
+        form.submit();
+      }
+    } catch (err) {
+      form.submit();
+    }
+  });
+</script>
+
+</body>
+</html>

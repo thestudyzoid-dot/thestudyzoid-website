@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Material – The Study Zoid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #1e293b;
+      --accent: #38bdf8;
+      --light: #e0f2fe;
+      --white: #ffffff;
+      --muted: #94a3b8;
+      --border: rgba(56,189,248,0.15);
+      --glow: 0 0 40px rgba(56,189,248,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--primary);
+      color: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(15,23,42,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-logo span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover { color: var(--accent); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    /* ─── PAGE HEADER ─────────────────────────────── */
+    .page-header {
+      padding: 130px 5% 70px;
+      background: var(--secondary);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 65%);
+    }
+
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 500px;
+    }
+
+    /* ─── CONTENT ─────────────────────────────────── */
+    .content {
+      padding: 72px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .block-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .block-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── PDF SECTION ─────────────────────────────── */
+    .pdf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 72px;
+    }
+
+    .pdf-card {
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--white);
+      transition: all 0.25s;
+    }
+
+    .pdf-card:hover {
+      border-color: rgba(56,189,248,0.4);
+      transform: translateY(-3px);
+      box-shadow: var(--glow);
+    }
+
+    .pdf-icon {
+      width: 48px; height: 48px;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .pdf-info { flex: 1; min-width: 0; }
+
+    .pdf-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pdf-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .pdf-dl {
+      color: var(--accent);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── VIDEO SECTION ───────────────────────────── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 72px;
+    }
+
+    .video-card {
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .video-card:hover {
+      border-color: rgba(56,189,248,0.3);
+      box-shadow: var(--glow);
+    }
+
+    .video-embed {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .video-info {
+      padding: 16px 20px;
+    }
+
+    .video-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    .video-subject {
+      font-size: 0.78rem;
+      color: var(--accent);
+    }
+
+    /* ─── EMPTY STATE ─────────────────────────────── */
+    .empty-note {
+      background: var(--secondary);
+      border: 1px dashed rgba(56,189,248,0.25);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 72px;
+    }
+
+    .empty-note span {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--primary);
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer .footer-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--white);
+    }
+
+    footer p { color: var(--muted); font-size: 0.85rem; }
+
+    footer nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-left: 20px;
+      transition: color 0.2s;
+    }
+
+    footer nav a:hover { color: var(--accent); }
+
+    /* ─── MOBILE ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px; left: 0; right: 0;
+        background: var(--secondary);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 20px 5%;
+        gap: 0;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 1rem; }
+
+      footer { flex-direction: column; text-align: center; }
+      footer nav { margin-top: 8px; }
+      footer nav a { margin: 0 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="The Study Zoid Logo" />
+    <span>The Study Zoid</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#courses">Courses</a></li>
+    <li><a href="study.html" class="active">Study Material</a></li>
+    <li><a href="review.html">Reviews</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── PAGE HEADER ───────────────────────────────── -->
+<div class="page-header">
+  <p class="section-tag">Free Resources</p>
+  <h1>Study Material</h1>
+  <p>Download notes, question papers, and watch lecture videos — all in one place.</p>
+</div>
+
+<!-- ─── CONTENT ───────────────────────────────────── -->
+<div class="content">
+
+  <!-- ══ PDF DOWNLOADS ═══════════════════════════════
+       HOW TO ADD PDFs:
+       1. Upload your PDF file to the /files/ folder in your GitHub repo.
+       2. Copy one of the .pdf-card blocks below and paste it inside .pdf-grid.
+       3. Set href="files/YOUR_FILENAME.pdf"
+       4. Update the .pdf-name and .pdf-meta text.
+       5. Push to GitHub — done!
+  ═══════════════════════════════════════════════════ -->
+
+  <h2 class="block-title">📄 PDF Notes & Papers</h2>
+
+  <div class="pdf-grid">
+
+    <!-- ✏️ EDIT: Replace these examples with your actual files -->
+
+    <a href="files/maths-class10-sample.pdf" class="pdf-card" download>
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-info">
+        <div class="pdf-name">Maths – Class 10 Sample Paper</div>
+        <div class="pdf-meta">Class 10 · Board Prep</div>
+      </div>
+      <span class="pdf-dl">⬇</span>
+    </a>
+
+    <a href="files/science-class10-notes.pdf" class="pdf-card" download>
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-info">
+        <div class="pdf-name">Science – Class 10 Notes</div>
+        <div class="pdf-meta">Class 10 · Chapter Notes</div>
+      </div>
+      <span class="pdf-dl">⬇</span>
+    </a>
+
+    <a href="files/physics-jee-formulas.pdf" class="pdf-card" download>
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-info">
+        <div class="pdf-name">Physics Formula Sheet – JEE</div>
+        <div class="pdf-meta">JEE · Quick Reference</div>
+      </div>
+      <span class="pdf-dl">⬇</span>
+    </a>
+
+    <a href="files/biology-neet-mcqs.pdf" class="pdf-card" download>
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-info">
+        <div class="pdf-name">Biology MCQs – NEET Practice</div>
+        <div class="pdf-meta">NEET · Practice Set</div>
+      </div>
+      <span class="pdf-dl">⬇</span>
+    </a>
+
+    <!-- ✏️ ADD MORE PDF CARDS HERE following the same pattern -->
+
+  </div>
+
+  <!-- ══ YOUTUBE VIDEOS ═══════════════════════════════
+       HOW TO ADD YOUTUBE VIDEOS:
+       1. Open the YouTube video you want to embed.
+       2. Click Share → Embed.
+       3. Copy only the 11-character video ID from the URL.
+          Example: https://www.youtube.com/watch?v=XXXXXXXXXXX
+          The ID is: XXXXXXXXXXX
+       4. In the iframe below, replace "XXXXXXXXXXX" with your video ID.
+       5. Update the .video-title and .video-subject text.
+  ═══════════════════════════════════════════════════ -->
+
+  <h2 class="block-title">🎬 Video Lectures</h2>
+
+  <div class="video-grid">
+
+    <!-- ✏️ EDIT: Replace VIDEO_ID_HERE with actual YouTube video IDs -->
+
+    <div class="video-card">
+      <div class="video-embed">
+        <!-- Replace VIDEO_ID_HERE with the 11-char YouTube video ID -->
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+          title="Lecture Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Quadratic Equations – Full Explanation</div>
+        <div class="video-subject">Maths · Class 10</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-embed">
+        <!-- Replace VIDEO_ID_HERE with the 11-char YouTube video ID -->
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+          title="Lecture Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Newton's Laws of Motion</div>
+        <div class="video-subject">Physics · Class 11 / JEE</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-embed">
+        <!-- Replace VIDEO_ID_HERE with the 11-char YouTube video ID -->
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+          title="Lecture Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Cell Structure & Functions</div>
+        <div class="video-subject">Biology · Class 11 / NEET</div>
+      </div>
+    </div>
+
+    <!-- ✏️ ADD MORE VIDEO CARDS HERE following the same pattern -->
+
+  </div>
+
+</div><!-- end .content -->
+
+<!-- ─── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div>
+    <div class="footer-brand">The Study Zoid</div>
+    <p style="margin-top:6px;">Beyond The Classroom</p>
+  </div>
+  <p>© 2025 The Study Zoid. All rights reserved.</p>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="study.html">Study Material</a>
+    <a href="review.html">Reviews</a>
+  </nav>
+</footer>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function () {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>
